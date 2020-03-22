@@ -1,0 +1,101 @@
+{%extends "base.html" %}
+{% load npr_extras %}
+
+
+{%block title%}Search result: {{search_content}}{%endblock%}
+
+{%block content%}
+<div class="podcast-list">
+    <div class="row">
+        <h5 class="col">Search results: <span class="text-primary">{{search_content}}</span></h5>
+    </div>
+    <!-- render podcast search in exist -->
+    {%if result_podcast%}
+    <div class="row">
+        <h5 class="col text-warning my-2">Podcast</h5>
+    </div>
+    <div class="row justify-content-start"> -->
+    {%for pod in result_podcast%}
+      <div class="card border-0 col col-md-3 my-2">
+        <img src="{{pod.img}}" alt="" class="img-thumbnail">
+        <div class="card-body px-2 py-1">
+          <h6 class="text-muted small">{{pod.category}}</h6>
+          <a href="{%url 'npr:update_podcast' pod.p_id pod.slug %}">
+            <h6 class="card-title text-body">{{pod.title|highlight:search_content}}</h6>
+          </a>
+       
+          </p>
+        </div>
+      </div>
+    {%endfor%}
+    </div>
+    {%endif%}
+
+    <!-- render episode search if exist -->
+    {%if result_episode%}
+    <div class="row">
+        <h5 class="col text-warning my-2">Episodes</h5>
+    </div>
+    {%for ep in result_episode%}
+    <!-- episode info -->
+       <div class="episode border-bottom border-light py-3">
+           <div class="episode-info">
+               <div class="row align-items-center">
+                   {%if ep.img_link%}
+                   <div class="col">
+                       <h6 class="small text-secondary"> {{ep.p}}</h6>
+                        <!-- highlight search content by custom template filter -->
+                       <a href="{%url 'npr:podcast' ep.slug%}"><h6 class="text-body">{{ep.title|highlight:search_content}}</h6></a>
+                       <div class="text-secondary">{{ep.teaser|highlight:search_content}}</div>
+                   </div>
+                   <div class="d-none d-md-block col-3">
+                       <img src="{{ep.img_link}}" alt="" class="img-fluid">
+                   </div>
+                   {%else%}
+                   <div class="col pr-2">
+                        <h6 class="small text-secondary"> {{ep.p}}</h6>
+                       <h6 class="text-body">{{ep.title|highlight:search_content}}</h6>
+                       <div class="text-secondary">{{ep.teaser|highlight:search_content}}</div>
+                   </div>
+                   {%endif%}
+                   
+               </div>
+           </div>
+           <div class="episode-control my-2">
+            <div class="row justify-content-start">
+                <div class="btn-group col-auto" role="group" aria-label="Basic example">
+                    {%if ep.media_link%}
+                    <a class="play-button btn btn-outline-primary text-primary px-3 btn-sm mr-1" title="{{ep.title}}" value="{{ep.media_link}}">Play </a>
+                    {%endif%}
+                    {%if ep.media_link%}
+                    <a href="{{ep.media_link}}" class="btn btn-outline-info text-success btn-sm mr-1">Download</a>
+                    {%endif%}
+                    {%if ep.transcript_link%}
+                    <a href="{{ep.transcript_link}}" target="_blank" class="btn btn-outline-warning text-warning btn-sm mr-1">Transcrpit</a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+        </div>
+    {%endfor%}
+    {%endif%}
+    <div class="media fixed-top row justify-content-end">
+        <div class="media-content mt-0 col-5">
+            <h6 id="player-title" class="d-none d-sm-block my-0 pl-3 small">{{podcast.title}}</h6>
+            <audio src="" id="player" class="px-0" preload controls="controls"></audio>
+        </div>
+    </div>
+</div>
+{%endblock%}
+
+{%block script%}
+<script>
+$( ".play-button" ).click(function() {
+    var src = $(this).attr('value')
+    var title = $(this).attr('title')
+    $('#player-title').text(title)
+    $('#player').attr('src',src)
+    $('#player')[0].play();
+});
+</script>
+{%endblock%}
