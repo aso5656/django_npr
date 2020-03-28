@@ -138,7 +138,7 @@ CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_BEAT_SCHEDULE = {
     'task-number-one': {
         'task': 'npr.tasks.task_number_one',
-        'schedule': crontab(minute='*/8')
+        'schedule': crontab(minute='0',hour='6,12')
         #'args': (*args)
     },
 }
