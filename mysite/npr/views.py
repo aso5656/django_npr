@@ -3,12 +3,8 @@ from django.views import generic
 from django.shortcuts import redirect,reverse,render
 from django.db.models import Q #多条件查询
 from django.http import Http404
-from .functions import *
 from .models import *
 from django.utils import timezone
-from multiprocessing import Pool,freeze_support
-from functools import wraps
-
 # Create your views here.
 
 
@@ -79,33 +75,6 @@ class PodcastView(generic.DetailView):
         return context
 
 
-
-def update_episode(request,p_id,slug):
-
-    selected_pod = Podcast.objects.get(p_id=p_id) 
-
-    e = UpdateEpisode(selected_pod.link,p_id) 
-
-    E=e.render_episode() #get latest episodes ~24 or so
-
-    existing_ep_list = selected_pod.episode_set.all() #get existing episodes
-
-    def check_ep_exist(ep):
-
-        ep_check = existing_ep_list.filter(slug=ep['slug']) #check if the query exist ep with same slug
-
-        if ep_check.exists():
-            return 
-        else: #if not exist,create an episode
-            new_ep = Episode(title=ep['title'],p_id=p_id,time = ep['time'],teaser = ep['teaser'],img_link=ep['img_link'],transcript_link=ep['transcript_link'],media_link=ep['media_link'],slug = ep['slug'])
-            new_ep.save()
-            return 
-
-    for i in E:
-        check_ep_exist(i)
-
-    #redirect to podcast page
-    return redirect(reverse('npr:podcast',args=(slug,)))
 
 def search(request):
     try:
