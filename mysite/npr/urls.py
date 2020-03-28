@@ -10,6 +10,6 @@ urlpatterns = [
     path('search',views.search,name='search'),
     path('category/<slug:slug>',views.CategoryView.as_view(),name= 'by_category'),
     path('<slug:slug>',views.PodcastView.as_view(),name='podcast'),
-    path('podcast/<int:p_id>/<slug:slug>',views.update_episode,name='update_podcast'),
+    #path('podcast/<int:p_id>/<slug:slug>',views.update_episode,name='update_podcast'),
     path('podcast/<slug:slug>/<int:page>',views.PodcastView.as_view(),name='podcast_by_page'),
 ]
