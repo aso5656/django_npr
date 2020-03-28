@@ -10,8 +10,7 @@ from multiprocessing import Pool,freeze_support
 from functools import wraps
 
 # Create your views here.
-if __name__ == '__main__':
-    freeze_support()
+
 
 class IndexView(generic.ListView):
     template_name='npr/index.html'
@@ -133,6 +132,8 @@ def search(request):
 
     #render results in search.html 
         return render(request,"npr/search.html", context)
+
+
 
 
 

@@ -1,3 +1,4 @@
+import grequests
 import requests
 from bs4 import  BeautifulSoup
 from django.template.defaultfilters import slugify

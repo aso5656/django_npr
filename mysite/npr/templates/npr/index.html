@@ -23,7 +23,7 @@
           {%if order == 'by_date'%}
           <h6 class="text-muted small py-1 mb-0">{{pod.latest_episode}}</h6>
           {% endif %}
-          <a href="{%url 'npr:update_podcast' pod.p_id pod.slug %}">
+          <a href="{%url 'npr:podcast' pod.slug %}">
             <h6 class="card-title text-body">{{pod.title}}</h6>
           </a>
           

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,13 +26,14 @@ SECRET_KEY = ')8wfg)war^g*8=hu(d7-koiu*#&sa!*-iv=c*2q21k8y(r0w5p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'npr.apps.NprConfig',
+    'abola.apps.AbolaConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -123,3 +125,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+# Celery application definition
+# http://docs.celeryproject.org/en/v4.0.2/userguide/configuration.html
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_BEAT_SCHEDULE = {
+    'task-number-one': {
+        'task': 'npr.tasks.task_number_one',
+        'schedule': crontab(minute='*/8')
+        #'args': (*args)
+    },
+}

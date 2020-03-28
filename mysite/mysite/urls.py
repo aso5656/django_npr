@@ -18,6 +18,7 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('abola/',include('abola.urls')),
     path('npr/',include('npr.urls')),
     
 ]
