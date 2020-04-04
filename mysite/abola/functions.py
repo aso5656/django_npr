@@ -35,12 +35,18 @@ def news_render(res):
     title = soup.select("#body_Ver_lblTitulo")[0].string
 
     body = soup.select('#body_Ver_lblNoticia')[0].text
+
+    translator = Translator()
+    
     news= {}
 
-    news['title'] = title
     news['time_stamp']=time_stamp
-    
-    translator = Translator()
+
+    try:
+        news['title'] = translator.translate(title).text
+    else:
+        news['title'] = title
+
     try:
         body_trans = translator.translate(body).text
         news['body'] = body_trans
