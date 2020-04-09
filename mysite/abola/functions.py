@@ -36,15 +36,24 @@ def news_render(res):
 
     body = soup.select('#body_Ver_lblNoticia')[0].text
 
+    img = soup.select('#body_Ver_imgNoticia')
+
+    if img:
+        img = img[0].get('src')
+    else:
+        img = ''
+
     translator = Translator()
     
     news= {}
 
     news['time_stamp']=time_stamp
 
+    news['img'] = img
+
     try:
         news['title'] = translator.translate(title).text
-    else:
+    except:
         news['title'] = title
 
     try:
