@@ -12,7 +12,7 @@
 <body>
     <div class="navbar">
         <div class="col-5 col-sm-2 my-2">
-            <img src="https://media.npr.org/chrome_svg/npr-logo.svg" alt="NPR logo">
+            <img src="https://www.abola.pt/img/logoabola.png" alt="Abola logo">
         </div>
     </div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="https://www.npr.org/sections/news/">News</a>
+              <a class="nav-link" href="{%url 'abola:index'%}">News</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://www.npr.org/music/">Music</a>
@@ -42,16 +42,32 @@
         </form>
     </nav>
     <div class="container">
-      {%for t in results%}
-        {%for k,v in t.items%}
-        <a href="{%url 'abola:render_team' k%}">{{k}}</a>
+        {%if results%}
+        <div class="row row-cols-2">
+          {%for t in results%}
+            {%for k,v in t.items%}
+            <a href="{%url 'abola:render_team' k%}" class="col list-group-item list-group-item-action">{{k}}</a>
+            {%endfor%}
+          {%endfor%}
+        </div>
+        {%endif%}
+
+        {%if team_news%}
+        {%for i in team_news%}
+        <div class="row align-items-center">
+          <div class="col-9">
+            <h6>{{i.title}}</h6>
+            <p class="small">{{i.time_stamp}}</p>
+            <p class="text-body">{{i.body}}</p>
+          </div>
+          <div class="col-3">
+            <img src="{{i.img}}" class="img-fluid" alt="image">
+          </div>
+          
+        </div> 
         {%endfor%}
-      {%endfor%}
-      {%for i in team_news%}
-        <h6>{{i.title}}</h6>
-        <p class="small">{{i.time_stamp}}</p>
-        <p class="text-body">{{i.body}}</p>
-      {%endfor%}
+        {%endif%}
+      
           {%block content%}
 
           {%endblock%}
