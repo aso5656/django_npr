@@ -12,9 +12,7 @@ def resp_render(url):
     soup = BeautifulSoup(res.content,"html.parser")
 
     section1 = soup.select('.noticias')[0].find_all('a')
-
-    team_name = soup.select('#body_MenuTopoClubes_lblNomeClube')[0].string.title()
-    
+ 
     news_links = ['https://www.abola.pt'+link.get('href') for link in section1]
 
 
@@ -29,33 +27,35 @@ def resp_render(url):
 def news_render(res):
 
     soup = BeautifulSoup(res.content,"html.parser")
+    
+    translator = Translator()
 
     time_stamp = soup.select("#body_Ver_lblHora")[0].string
-
+    
     title = soup.select("#body_Ver_lblTitulo")[0].string
-
-    body = soup.select('#body_Ver_lblNoticia')[0].text
-
+    
     img = soup.select('#body_Ver_imgNoticia')
-
+    
     if img:
         img = img[0].get('src')
     else:
         img = ''
-
-    translator = Translator()
+        
     
-    news= {}
-
-    news['time_stamp']=time_stamp
-
-    news['img'] = img
-
+    
     try:
-        news['title'] = translator.translate(title).text
+    	title = translator.translate(title).text
     except:
-        news['title'] = title
+    	title = title
 
+    body = soup.select('#body_Ver_lblNoticia')[0].text
+    news= {}
+	
+    news['title'] = title
+    news['time_stamp']=time_stamp
+    news['img'] = img
+    
+    
     try:
         body_trans = translator.translate(body).text
         news['body'] = body_trans
@@ -69,7 +69,7 @@ def news_render(res):
     
 def news_fetch():
     
-    url = 'https://www.abola.pt/uc/Desporto/ListaClubes.aspx?e=6674'
+    url = 'https://www.abola.pt/uc/Desporto/ListaClubes.aspx?e=7187'
 
     headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36'}
     try:
